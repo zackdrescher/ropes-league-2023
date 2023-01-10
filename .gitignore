@@ -1,2 +1,5 @@
 # poetry venv
 .venv
+
+# google api key
+*.json
