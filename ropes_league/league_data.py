@@ -5,6 +5,8 @@ import gspread
 import numpy as np
 import pandas as pd
 
+from . import scoring
+
 load_dotenv()
 
 gc = gspread.service_account(
@@ -76,3 +78,6 @@ class LeagueData:
             grade_3=lambda df: prep_grade(df.grade_3),
             difficulty_3=lambda df: df.grade_3.replace(GRADE_DIFFICULTY),
         )
+
+    def scores(self, week: int):
+        return scoring.score_climbs(self.climbs(week), self.climbers())
