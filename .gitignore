@@ -3,3 +3,6 @@
 
 # google api key
 *.json
+
+# python
+__pycache__
