@@ -82,5 +82,10 @@ class LeagueData:
     def scores(self, week: int):
         return scoring.score_climbs(self.climbs(week), self.climbers())
 
+    def print_scores(self, week: int):
+        scores = self.scores(week)
+        teams = scoring.score_teams(self.teams(), scores)
+        scoring.print_night_results(teams, scores)
+
     def leaderboard(self):
         scoring.print_leader_board(self.teams(), self.climbers())

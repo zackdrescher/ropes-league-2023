@@ -7,17 +7,27 @@ def points(threshold, climb, type):
 
 
 def score_climbs(climbs: pd.DataFrame, climbers: pd.DataFrame) -> pd.DateOffset:
-    return climbs.merge(
-        climbers[["name", "difficulty"]].rename(
-            columns={"difficulty": "climber_difficulty"}
-        ),
-        left_on="climber_id",
-        right_index=True,
-    ).assign(
-        points_1=lambda df: points(df.climber_difficulty, df.difficulty_1, df.rope_1),
-        points_2=lambda df: points(df.climber_difficulty, df.difficulty_2, df.rope_2),
-        points_3=lambda df: points(df.climber_difficulty, df.difficulty_3, df.rope_3),
-        points=lambda df: df[["points_1", "points_2", "points_3"]].sum(axis=1),
+    return (
+        climbs.drop("name", axis=1)
+        .merge(
+            climbers[["name", "difficulty"]].rename(
+                columns={"difficulty": "climber_difficulty"}
+            ),
+            left_on="climber_id",
+            right_index=True,
+        )
+        .assign(
+            points_1=lambda df: points(
+                df.climber_difficulty, df.difficulty_1, df.rope_1
+            ),
+            points_2=lambda df: points(
+                df.climber_difficulty, df.difficulty_2, df.rope_2
+            ),
+            points_3=lambda df: points(
+                df.climber_difficulty, df.difficulty_3, df.rope_3
+            ),
+            points=lambda df: df[["points_1", "points_2", "points_3"]].sum(axis=1),
+        )
     )
 
 
@@ -40,7 +50,7 @@ def climb_string(row):
 
 
 def print_night_results(teams: pd.DataFrame, scores: pd.DataFrame):
-    for i, (team, t) in enumerate(teams.sort_values("scores").iterrows()):
+    for i, (team, t) in enumerate(teams.iterrows()):
         c = scores[scores.team_id == team]
         print(f"{i + 1}. {t['name']} {t.emoji} - {t.scores} points")
 
