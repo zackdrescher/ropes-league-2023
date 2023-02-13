@@ -11,6 +11,7 @@ python = "^3.8"
 gspread = "^5.7.2"
 python-dotenv = "^0.21.0"
 pandas = "^1.5.2"
+sqlalchemy = "^2.0.3"
 
 
 [tool.poetry.group.dev.dependencies]
