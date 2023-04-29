@@ -8,7 +8,7 @@ def points(threshold, climb, type):
 
 def score_climbs(climbs: pd.DataFrame, climbers: pd.DataFrame) -> pd.DateOffset:
     return (
-        climbs.drop("name", axis=1)
+        climbs.drop("name", axis=1, errors="ignore")
         .merge(
             climbers[["name", "difficulty"]].rename(
                 columns={"difficulty": "climber_difficulty"}

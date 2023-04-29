@@ -79,8 +79,19 @@ class LeagueData:
             difficulty_3=lambda df: df.grade_3.replace(GRADE_DIFFICULTY),
         )
 
+    def grades(self, week: int):
+        return make_dataframe(
+            self.wks.worksheet(f"Week {week} Grades").get_all_records()
+        ).assign(
+            grade=lambda df: prep_grade(df.grade),
+            difficulty=lambda df: df.grade.replace(GRADE_DIFFICULTY),
+        )
+
     def scores(self, week: int):
         return scoring.score_climbs(self.climbs(week), self.climbers())
+
+    def old_scores(self, week: int):
+        return scoring.score_climbs(self.climbs(week), self.grades(week))
 
     def print_scores(self, week: int):
         scores = self.scores(week)
@@ -89,3 +100,20 @@ class LeagueData:
 
     def leaderboard(self):
         scoring.print_leader_board(self.teams(), self.climbers())
+
+    def weeks(self):
+        return list(
+            map(
+                lambda x: int(x.split(" ")[1]),
+                filter(
+                    lambda x: "Climbs" in x,
+                    map(lambda x: x.title, self.wks.worksheets()),
+                ),
+            )
+        )
+
+    def season_scores(self):
+        return pd.concat(
+            [self.old_scores(week).assign(week=week) for week in self.weeks()],
+            ignore_index=True,
+        )
