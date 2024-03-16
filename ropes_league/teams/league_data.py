@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from ..league_data import LeagueData
+from ..league_data import LeagueData, prep_grade
 from . import scoring
 
 GRADE_DIFFICULTY = {
@@ -22,10 +22,6 @@ GRADE_DIFFICULTY = {
     "5.13": 13,
     "5.13+": 14,
 }
-
-
-def prep_grade(grade):
-    return grade.replace({5.1: "5.10", "No Climb": "X"}).astype(str)
 
 
 class TeamLeagueData(LeagueData):

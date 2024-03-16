@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 
+from ..league_data import climb_string
+
 
 def points(threshold, climb, type):
     return (climb - threshold + 1 + np.where(type == "Lead", 0.5, 0)).fillna(0)
@@ -40,13 +42,6 @@ def score_teams(teams: pd.DataFrame, scores: pd.DataFrame) -> pd.DataFrame:
             points=lambda df: df.points_earned + df.points,
         )
     )
-
-
-def climb_string(row):
-    l1 = "L" if row.rope_1 == "Lead" else ""
-    l2 = "L" if row.rope_2 == "Lead" else ""
-    l3 = "L" if row.rope_3 == "Lead" else ""
-    return f"{row.grade_1}{l1} {row.grade_2}{l2} {row.grade_3}{l3}"
 
 
 def print_night_results(teams: pd.DataFrame, scores: pd.DataFrame):

@@ -16,8 +16,19 @@ gc = gspread.service_account(
 )
 
 
+def prep_grade(grade):
+    return grade.replace({5.1: "5.10", "No Climb": "X"}).astype(str)
+
+
 def make_dataframe(records, index=None):
     return pd.DataFrame.from_records(records, index=index)
+
+
+def climb_string(row):
+    l1 = "L" if row.rope_1 == "Lead" else ""
+    l2 = "L" if row.rope_2 == "Lead" else ""
+    l3 = "L" if row.rope_3 == "Lead" else ""
+    return f"{row.grade_1}{l1} {row.grade_2}{l2} {row.grade_3}{l3}"
 
 
 class LeagueData(ABC):
